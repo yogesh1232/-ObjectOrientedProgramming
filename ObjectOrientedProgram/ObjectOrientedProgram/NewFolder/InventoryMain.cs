@@ -7,21 +7,39 @@ using Newtonsoft.Json;
 
 namespace ObjectOrientedProgram.NewFolder
 {
-    public class InventoryMain
+    public class InventoryManager
     {
+        // This method is used to read the data from json file.
         public void DisplayData(string filepath)
         {
             try
             {
-                using (StreamReader read = new StreamReader(filepath))
+                if (File.Exists(filepath))
                 {
-                    var json = read.ReadToEnd();
-                    var items = JsonConvert.DeserializeObject<List<InventoryModel>>(json);
+                    string jsonData = File.ReadAllText(filepath);
+                    InventoryModel jsonObjectArray = JsonConvert.DeserializeObject<InventoryModel>(jsonData);
+
                     Console.WriteLine("Name\tWeight\tRate\tAmount");
-                    foreach (var item in items)
+
+                    List<Rice> rice = jsonObjectArray.RiceList;
+                    foreach (var item in rice)
                     {
-                        Console.WriteLine("{0}" + "\t" + "{1}" + "\t" + "{2}" + "\t" + "{3}", item.Name, item.Weight, item.PricePerKg, item.Weight * item.PricePerKg);
+                        Console.WriteLine("{0}" + "\t" + "{1}" + "\t" + "{2}" + "\t" + "{3}", item.Name, item.Weight, item.PricePerkg, item.Weight * item.PricePerkg);
                     }
+                    List<Wheat> wheat = jsonObjectArray.WheatList;
+                    foreach (var item in wheat)
+                    {
+                        Console.WriteLine("{0}" + "\t" + "{1}" + "\t" + "{2}" + "\t" + "{3}", item.Name, item.Weight, item.PricePerkg, item.Weight * item.PricePerkg);
+                    }
+                    List<Pulses> pulses = jsonObjectArray.PulsesList;
+                    foreach (var item in pulses)
+                    {
+                        Console.WriteLine("{0}" + "\t" + "{1}" + "\t" + "{2}" + "\t" + "{3}", item.Name, item.Weight, item.PricePerkg, item.Weight * item.PricePerkg);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("\nSpecified file path does not exist");
                 }
             }
             catch (Exception e)
